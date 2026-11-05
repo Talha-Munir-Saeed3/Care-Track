@@ -1,0 +1,252 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_0e49a"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedoffice365_c9b35"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "new_corporateaccount",
+              "subscriptionRequest/scope": 4
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          }
+        }
+      },
+      "actions": {
+        "Condition": {
+          "actions": {
+            "Switch": {
+              "cases": {
+                "Case_0": {
+                  "case": 0,
+                  "actions": {
+                    "Set_variable_1": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "DayOffset",
+                        "value": "@int(1)"
+                      }
+                    }
+                  }
+                },
+                "Case_2": {
+                  "case": 2,
+                  "actions": {
+                    "Set_variable_2": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "DayOffset",
+                        "value": "@int(1)"
+                      }
+                    }
+                  }
+                },
+                "Case_4": {
+                  "case": 4,
+                  "actions": {
+                    "Set_variable_3": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "DayOffset",
+                        "value": "@int(1)"
+                      }
+                    }
+                  }
+                },
+                "Case_6": {
+                  "case": 6,
+                  "actions": {
+                    "Set_variable_4": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "DayOffset",
+                        "value": "@int(2)"
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "actions": {
+                  "Set_variable": {
+                    "type": "SetVariable",
+                    "inputs": {
+                      "name": "DayOffset",
+                      "value": 0
+                    }
+                  }
+                }
+              },
+              "expression": "@dayOfWeek(variables('LeadDate'))",
+              "type": "Switch"
+            },
+            "TargetDate": {
+              "runAfter": {
+                "Switch": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@addDays(variables('LeadDate'), variables('DayOffset'))"
+            },
+            "MeetingStart": {
+              "runAfter": {
+                "TargetDate": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@formatDateTime(outputs('TargetDate'), 'yyyy-MM-ddT10:00:00')"
+            },
+            "MeetingEnd": {
+              "runAfter": {
+                "MeetingStart": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@addMinutes(outputs('MeetingStart'), 30, 'yyyy-MM-ddTHH:mm:ss')"
+            },
+            "Create_event_(V4)": {
+              "runAfter": {
+                "MeetingEnd": [
+                  "Succeeded"
+                ]
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "table": "AAMkADEyZjI5NWI5LTJmODYtNDYzZS1hYTk4LTAwZGY2ZTk5YzRhNABGAAAAAACnKhw4bad-SKK5UI2HfYJNBwBU6ov_jimiSKzAM3PpLdjnAAAAAAEGAABU6ov_jimiSKzAM3PpLdjnAAAElGtJAAA=",
+                  "item/subject": "CareTrack Wellness Package Discussion — @{triggerOutputs()?['body/new_companyname']}",
+                  "item/start": "@outputs('MeetingStart')",
+                  "item/end": "@outputs('MeetingEnd')",
+                  "item/timeZone": "(UTC+05:00) Islamabad, Karachi",
+                  "item/requiredAttendees": "@{triggerOutputs()?['body/new_hrcontactemail']}; sectiona9@28fzrb.onmicrosoft.com",
+                  "item/optionalAttendees": "sectiona9@28fzrb.onmicrosoft.com",
+                  "item/body": "<p class=\"editor-paragraph\">We'll cover package options, pricing, and rollout timeline for @{triggerOutputs()?['body/new_companyname']}.</p>",
+                  "item/showAs": "busy"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "operationId": "V4CalendarPostItem",
+                  "connectionName": "shared_office365"
+                }
+              }
+            },
+            "Send_an_email_(V2)": {
+              "runAfter": {
+                "Create_event_(V4)": [
+                  "Succeeded"
+                ]
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "emailMessage/To": "@triggerOutputs()?['body/new_hrcontactemail']",
+                  "emailMessage/Subject": "CareTrack Wellness Package Discussion — @{triggerOutputs()?['body/new_companyname']}",
+                  "emailMessage/Body": "<p class=\"editor-paragraph\">Dear @{triggerOutputs()?['body/new_hrcontactname']},<br><br>Thank you for your interest in CareTrack Corporate Wellness.<br><br>We've scheduled a call to discuss package options for @{triggerOutputs()?['body/new_companyname']}:<br><br>Date: @{formatDateTime(outputs('MeetingStart'), 'dddd, MMMM d, yyyy')}<br>Time: @{formatDateTime(outputs('MeetingStart'), 'h:mm tt')}<br>Meeting Link: @{body('Create_event_(V4)')?['webLink']}<br><br>If this time doesn't work, please reply to reschedule.<br><br>Looking forward to speaking with you.<br><br>Regards,<br>CareTrack Corporate Wellness Team</p>",
+                  "emailMessage/Importance": "Normal"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "operationId": "SendEmailV2",
+                  "connectionName": "shared_office365"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_variable_1": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {}
+          },
+          "expression": {
+            "and": [
+              {
+                "equals": [
+                  "@int(triggerBody()?['new_isactive'])",
+                  1
+                ]
+              }
+            ]
+          },
+          "type": "If"
+        },
+        "Initialize_variable": {
+          "runAfter": {},
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "LeadDate",
+                "type": "string",
+                "value": "@addDays(utcNow(), 1)"
+              }
+            ]
+          }
+        },
+        "Initialize_variable_1": {
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "DayOffset",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

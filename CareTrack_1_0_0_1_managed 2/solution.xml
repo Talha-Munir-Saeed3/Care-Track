@@ -1,0 +1,151 @@
+<ImportExportXml version="9.2.26053.152" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26053.152" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26053.00152">
+  <SolutionManifest>
+    <UniqueName>CareTrack</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="CareTrack" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions />
+    <Version>1.0.0.1</Version>
+    <Managed>1</Managed>
+    <Publisher>
+      <UniqueName>DefaultPublisherorgede4fce2</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="Default Publisher for orgede4fce2" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions>
+        <Description description="Default publisher for this organization" languagecode="1033" />
+      </Descriptions>
+      <EMailAddress xsi:nil="true"></EMailAddress>
+      <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
+      <CustomizationPrefix>new</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>10000</CustomizationOptionValuePrefix>
+      <Addresses>
+        <Address>
+          <AddressNumber>1</AddressNumber>
+          <AddressTypeCode xsi:nil="true"></AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode xsi:nil="true"></ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+        <Address>
+          <AddressNumber>2</AddressNumber>
+          <AddressTypeCode xsi:nil="true"></AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode xsi:nil="true"></ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+      </Addresses>
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="1" schemaName="new_appointment" behavior="0" />
+      <RootComponent type="1" schemaName="new_corporateaccount" behavior="0" />
+      <RootComponent type="1" schemaName="new_corporateaccountlifecycle" behavior="0" />
+      <RootComponent type="1" schemaName="new_doctor" behavior="0" />
+      <RootComponent type="1" schemaName="new_doctorschedule" behavior="0" />
+      <RootComponent type="1" schemaName="new_employee" behavior="0" />
+      <RootComponent type="1" schemaName="new_hospitaldepartment" behavior="0" />
+      <RootComponent type="1" schemaName="new_invoice" behavior="0" />
+      <RootComponent type="1" schemaName="new_medicalrecord" behavior="0" />
+      <RootComponent type="1" schemaName="new_patient" behavior="0" />
+      <RootComponent type="9" schemaName="new_consultationoption" behavior="0" />
+      <RootComponent type="9" schemaName="new_packagetypeoptions" behavior="0" />
+      <RootComponent type="9" schemaName="new_paymentfrequencyoptions" behavior="0" />
+      <RootComponent type="9" schemaName="new_paymentstatusoptions" behavior="0" />
+      <RootComponent type="20" id="{2920a37e-f368-f111-ab0c-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="20" id="{a0342d21-f368-f111-ab0c-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="20" id="{de12216c-f368-f111-ab0c-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="20" id="{eb465547-f368-f111-ab0c-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="20" id="{f9a8cc55-f368-f111-ab0c-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{05f42096-0e6c-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{2048fc48-056c-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{26136b44-e46b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{26c707e4-f06b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{30979992-ec6b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{3c09bf70-3f6b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{52af4576-526b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{57de598d-4f6b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{6334564e-726b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{69c88da0-5b6b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{7248d580-f46b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{740d622b-8a6b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{7844a0e3-7d6b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{8564ef75-496b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{8a72d4c3-666b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{9647f301-606b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{9feb7749-666b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{a2de2869-2e6c-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{c123d19d-556b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{d9412844-7d6b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{dfdd5752-456b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="29" id="{e536126d-eb6b-f111-ab0d-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="62" schemaName="new_CareTrackAdminPortal" behavior="0" />
+      <RootComponent type="70" id="{44d70055-0369-f111-ab0c-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="70" id="{bf838718-0369-f111-ab0c-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="70" id="{e4b81e5f-0269-f111-ab0c-000d3a5b0c32}" behavior="0" />
+      <RootComponent type="80" schemaName="new_CareTrackAdminPortal" behavior="0" />
+      <RootComponent type="300" schemaName="new_caretrackpatientportal_81c82" behavior="0" />
+    </RootComponents>
+    <MissingDependencies>
+      <MissingDependency>
+        <Required type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)">
+          <package appName="AppModule Web Resources Package" version="2.5">AppModuleWebResources (2.5)</package>
+        </Required>
+        <Dependent type="80" schemaName="new_CareTrackAdminPortal" displayName="CareTrack Admin Portal" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="SettingDefinition" displayName="AppChannel" solution="msdyn_AppFrameworkInfraExtensions (1.0.0.17)" id.uniquename="AppChannel">
+          <package appName="PowerAppsAppFramework Package" version="1.0.0.25">PowerAppsAppFramework_Anchor (1.0.0.25)</package>
+        </Required>
+        <Dependent type="AppSetting" displayName="parentappmoduleid.uniquename=new_CareTrackAdminPortal,settingdefinitionid.uniquename=AppChannel" id.parentappmoduleid.uniquename="new_CareTrackAdminPortal" id.settingdefinitionid.uniquename="AppChannel" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="SettingDefinition" displayName="m365copilotmodelappenabled" solution="msdyn_M365CopilotAppInfraSettings (9.2.0.5)" id.uniquename="m365copilotmodelappenabled">
+          <package appName="PowerAppsAppCopilotApp Package" version="9.2.0.5">msdyn_M365CopilotAppInfraSettings (9.2.0.5)</package>
+        </Required>
+        <Dependent type="AppSetting" displayName="parentappmoduleid.uniquename=new_CareTrackAdminPortal,settingdefinitionid.uniquename=m365copilotmodelappenabled" id.parentappmoduleid.uniquename="new_CareTrackAdminPortal" id.settingdefinitionid.uniquename="m365copilotmodelappenabled" />
+      </MissingDependency>
+    </MissingDependencies>
+  </SolutionManifest>
+</ImportExportXml>

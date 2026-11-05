@@ -1,0 +1,124 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_0e49a"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedoffice365_c9b35"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "undefined",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "recurrence": {
+            "frequency": "Day",
+            "interval": "1",
+            "startTime": "2026-06-19T04:00:00Z",
+            "timeZone": "Pakistan Standard Time",
+            "schedule": {
+              "hours": [
+                "9"
+              ],
+              "minutes": [
+                0
+              ]
+            }
+          },
+          "type": "Recurrence"
+        }
+      },
+      "actions": {
+        "List_rows": {
+          "runAfter": {},
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "new_corporateaccounts",
+              "$filter": "new_contractenddate eq @{formatDateTime(addDays(utcNow(), 30), 'yyyy-MM-dd')} and new_isactive eq false"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          }
+        },
+        "Apply_to_each": {
+          "foreach": "@outputs('List_rows')?['body/value']",
+          "actions": {
+            "Send_an_email_(V2)_Admin": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "emailMessage/To": "sectiona9@28fzrb.onmicrosoft.com",
+                  "emailMessage/Subject": "CareTrack — Contract Expiring Soon: @{items('Apply_to_each')?['new_companyname']}",
+                  "emailMessage/Body": "<p class=\"editor-paragraph\">The contract for @{items('Apply_to_each')?['new_companyname']} expires in 30 days (Contract End Date: @{formatDateTime(items('Apply_to_each')?['new_ContractEndDate'], 'MMMM d, yyyy')}).<br><br>Current Package: @{items('Apply_to_each')?['new_packagetype@OData.Community.Display.V1.FormattedValue']}<br>Enrolled Employees: @{items('Apply_to_each')?['new_numberofenrolledemployees']}<br>Contract Value: PKR @{items('Apply_to_each')?['new_totalcontractvalue']}<br><br>Please reach out to discuss renewal terms before the contract lapses.</p>",
+                  "emailMessage/Importance": "Normal"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "operationId": "SendEmailV2",
+                  "connectionName": "shared_office365"
+                }
+              }
+            },
+            "Send_an_email_(V2)_HR": {
+              "runAfter": {
+                "Send_an_email_(V2)_Admin": [
+                  "Succeeded"
+                ]
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "emailMessage/To": "@items('Apply_to_each')?['new_hrcontactemail']",
+                  "emailMessage/Subject": "CareTrack — Your Wellness Package Renewal is Coming Up",
+                  "emailMessage/Body": "<p class=\"editor-paragraph\">Dear @{items('Apply_to_each')?['new_hrcontactname']},<br><br>Your CareTrack Corporate Wellness package for @{items('Apply_to_each')?['new_companyname']} is set to expire on @{formatDateTime(items('Apply_to_each')?['new_ContractEndDate'], 'dd/MM/yyyy')}.<br><br>To ensure uninterrupted healthcare coverage for your employees, please contact us to discuss renewal options.<br><br>Current Package:@{items('Apply_to_each')?['new_packagetype@OData.Community.Display.V1.FormattedValue']}<br>Enrolled Employees: @{items('Apply_to_each')?['new_numberofenrolledemployees']}<br><br>Our team is happy to discuss adjusted terms based on your evolving needs.<br><br>Regards,<br>CareTrack Corporate Wellness Team</p>",
+                  "emailMessage/Importance": "Normal"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "operationId": "SendEmailV2",
+                  "connectionName": "shared_office365"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "List_rows": [
+              "Succeeded"
+            ]
+          },
+          "type": "Foreach"
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

@@ -1,0 +1,196 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_onedriveforbusiness": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedonedriveforbusiness_5afe7"
+        },
+        "api": {
+          "name": "shared_onedriveforbusiness"
+        }
+      },
+      "shared_excelonlinebusiness": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedexcelonlinebusiness_972f0"
+        },
+        "api": {
+          "name": "shared_excelonlinebusiness"
+        }
+      },
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_0e49a"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedoffice365_c9b35"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_a_file_is_created": {
+          "recurrence": {
+            "interval": 1,
+            "frequency": "Minute"
+          },
+          "metadata": {
+            "b!rYo8pw_nj0KA1RL7pNZAtcwyNGLu6-5Csxd0hyqi-92jN713TUweRJt-hIG_zvU1.01HLCZ5W3V6FR5EK3WNRHIQNHFIACNAYZP": "/Employee Imports",
+            "operationMetadataId": "be0429ed-bcbd-48c3-a6fd-e5fefc156e24"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "folderId": "b!rYo8pw_nj0KA1RL7pNZAtcwyNGLu6-5Csxd0hyqi-92jN713TUweRJt-hIG_zvU1.01HLCZ5W3V6FR5EK3WNRHIQNHFIACNAYZP",
+              "includeSubfolders": false,
+              "inferContentType": true
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness",
+              "operationId": "OnNewFileV2",
+              "connectionName": "shared_onedriveforbusiness"
+            }
+          }
+        }
+      },
+      "actions": {
+        "List_rows_present_in_a_table": {
+          "runAfter": {},
+          "metadata": {
+            "01HLCZ5W2W336KGDUHF5D2BX5IBF46654H": "/Employee Imports/BetaLLC_Employees.xlsx",
+            "operationMetadataId": "d555cfc4-a141-4185-bd3d-e793aaac026c",
+            "tableId": "EmployeeData",
+            "01HLCZ5W3EWQQVS5PKJBHZT4OYFXVFOOXN": "/Employee Imports/BetaLLC_Employees.xlsx",
+            "01HLCZ5WZOTMAOQ6U4ONEY47BMV2CRKE7J": "/Employee Imports/BetaLLC_Employees.xlsx"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "source": "me",
+              "drive": "b!rYo8pw_nj0KA1RL7pNZAtcwyNGLu6-5Csxd0hyqi-92jN713TUweRJt-hIG_zvU1",
+              "file": "01HLCZ5WZOTMAOQ6U4ONEY47BMV2CRKE7J",
+              "table": "EmployeeData"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+              "operationId": "GetItems",
+              "connectionName": "shared_excelonlinebusiness"
+            }
+          }
+        },
+        "Compose": {
+          "runAfter": {
+            "List_rows_present_in_a_table": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "6a7c3fb8-9e8b-43e6-aabf-e40269e1d758"
+          },
+          "type": "Compose",
+          "inputs": "2513d518-e47a-4953-bc52-c7462db2ae7e"
+        },
+        "Apply_to_each": {
+          "foreach": "@outputs('List_rows_present_in_a_table')?['body/value']",
+          "actions": {
+            "Add_a_new_row": {
+              "metadata": {
+                "operationMetadataId": "5d408990-1254-4428-a829-1222d6fd7775"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "new_employees",
+                  "item/new_Company@odata.bind": "@concat('/new_corporateaccounts(', outputs('Compose'), ')')",
+                  "item/new_empid": "@concat('EMP-', toUpper(substring(items('Apply_to_each')?['Email'], 0, indexOf(items('Apply_to_each')?['Email'], '@'))))",
+                  "item/new_email": "@items('Apply_to_each')?['Email']",
+                  "item/new_employeename": "@items('Apply_to_each')?['Full Name']",
+                  "item/new_phone": "@items('Apply_to_each')?['Phone Number']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Compose": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "46b58d20-e13b-40ef-a5d4-9d0ac8abc014"
+          },
+          "type": "Foreach"
+        },
+        "Get_a_row_by_ID": {
+          "runAfter": {
+            "Apply_to_each": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "new_corporateaccounts",
+              "recordId": "@outputs('Compose')"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          }
+        },
+        "Send_an_email_(V2)": {
+          "runAfter": {
+            "Get_a_row_by_ID": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "emailMessage/To": "@{outputs('Get_a_row_by_ID')?['body/new_hrcontactemail']}; sahirhassan093@gmail.com",
+              "emailMessage/Subject": "CareTrack — Employee Import Complete",
+              "emailMessage/Body": "<p class=\"editor-paragraph\">Dear HR Team,<br><br>Your employee list has been successfully imported into CareTrack.<br><br>Company: @{outputs('Get_a_row_by_ID')?['body/new_companyname']}<br><br>Your employees can now register and book appointments <br>using the CareTrack Patient Portal.<br><br>Regards,<br>CareTrack Team</p>",
+              "emailMessage/Importance": "Normal"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+              "operationId": "SendEmailV2",
+              "connectionName": "shared_office365"
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

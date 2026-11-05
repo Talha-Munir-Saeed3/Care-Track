@@ -1,0 +1,294 @@
+kind: TaskDialog
+inputs:
+  - kind: ManualTaskInput
+    propertyName: organization
+    value: https://orgede4fce2.crm.dynamics.com
+
+  - kind: ManualTaskInput
+    propertyName: entityName
+    value: new_doctors
+
+  - kind: AutomaticTaskInput
+    propertyName: "'$filter'"
+    description: |-
+      OData filter to narrow doctors by specialization (text match), e.g. 
+         new_specialization eq 'Cardiology'. Specializations typically match 
+         hospital department names such as Cardiology, Dermatology, General 
+         Medicine, Physiotherapy.
+
+modelDisplayName: List Doctors
+modelDescription: Looks up doctors, optionally filtered by department or specialization, to help match patients to the right doctor.
+outputs:
+  - propertyName: @odata.nextLink
+    name: Next link
+    description: The url to fetch next page data.
+
+  - propertyName: value
+    name: value
+
+action:
+  kind: InvokeConnectorTaskAction
+  connectionReference: new_CareTrackBookingAssistant.shared_commondataserviceforapps.shared-commondataser-8bf0e078-6604-4fed-aa94-d79ea1e8d63f
+  connectionProperties:
+    mode: Invoker
+
+  operationId: ListRecordsWithOrganization
+  dynamicOutputSchema:
+    kind: Record
+    properties:
+      "@odata.nextLink":
+        displayName: Next link
+        description: The url to fetch next page data.
+        visibility: Advanced
+        order: 1
+        type: String
+
+      value:
+        order: 0
+        type:
+          kind: Table
+          properties:
+            _createdby_value:
+              displayName: Created By (Value)
+              description: Unique identifier of the user who created the record.
+              visibility: Advanced
+              order: 4
+              type: String
+
+            _createdby_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+              displayName: Created By (Type)
+              description: Unique identifier of the user who created the record.
+              visibility: Advanced
+              order: 3
+              type: String
+
+            _createdonbehalfby_value:
+              displayName: Created By (Delegate) (Value)
+              description: Unique identifier of the delegate user who created the record.
+              visibility: Advanced
+              order: 2
+              type: String
+
+            _createdonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+              displayName: Created By (Delegate) (Type)
+              description: Unique identifier of the delegate user who created the record.
+              visibility: Advanced
+              order: 1
+              type: String
+
+            _modifiedby_value:
+              displayName: Modified By (Value)
+              description: Unique identifier of the user who modified the record.
+              visibility: Advanced
+              order: 16
+              type: String
+
+            _modifiedby_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+              displayName: Modified By (Type)
+              description: Unique identifier of the user who modified the record.
+              visibility: Advanced
+              order: 15
+              type: String
+
+            _modifiedonbehalfby_value:
+              displayName: Modified By (Delegate) (Value)
+              description: Unique identifier of the delegate user who modified the record.
+              visibility: Advanced
+              order: 14
+              type: String
+
+            _modifiedonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+              displayName: Modified By (Delegate) (Type)
+              description: Unique identifier of the delegate user who modified the record.
+              visibility: Advanced
+              order: 13
+              type: String
+
+            _new_department_value:
+              displayName: Department (Value)
+              order: 7
+              type: String
+
+            _new_department_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+              displayName: Department (Type)
+              order: 6
+              type: String
+
+            _ownerid_value:
+              displayName: Owner (Value)
+              description: Owner Id
+              visibility: Advanced
+              order: 20
+              type: String
+
+            _ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+              displayName: Owner (Type)
+              description: Owner Id
+              visibility: Advanced
+              order: 19
+              type: String
+
+            _owningbusinessunit_value:
+              displayName: Owning Business Unit (Value)
+              description: Unique identifier for the business unit that owns the record
+              visibility: Advanced
+              order: 22
+              type: String
+
+            _owningbusinessunit_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+              displayName: Owning Business Unit (Type)
+              description: Unique identifier for the business unit that owns the record
+              visibility: Advanced
+              order: 21
+              type: String
+
+            _owningteam_value:
+              displayName: Owning Team (Value)
+              description: Unique identifier for the team that owns the record.
+              visibility: Advanced
+              order: 24
+              type: String
+
+            _owningteam_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+              displayName: Owning Team (Type)
+              description: Unique identifier for the team that owns the record.
+              visibility: Advanced
+              order: 23
+              type: String
+
+            _owninguser_value:
+              displayName: Owning User (Value)
+              description: Unique identifier for the user that owns the record.
+              visibility: Advanced
+              order: 26
+              type: String
+
+            _owninguser_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+              displayName: Owning User (Type)
+              description: Unique identifier for the user that owns the record.
+              visibility: Advanced
+              order: 25
+              type: String
+
+            "@odata.id":
+              displayName: OData Id
+              description: OData row id
+              order: 18
+              type: String
+
+            createdon:
+              displayName: Created On
+              description: Date and time when the record was created.
+              visibility: Advanced
+              order: 5
+              type: DateTime
+
+            importsequencenumber:
+              displayName: Import Sequence Number
+              description: Sequence number of the import that created this record.
+              visibility: Advanced
+              order: 12
+              type: Number
+
+            modifiedon:
+              displayName: Modified On
+              description: Date and time when the record was modified.
+              visibility: Advanced
+              order: 17
+              type: DateTime
+
+            new_availabilitystatus:
+              displayName: Availability Status
+              visibility: Advanced
+              order: 0
+              dynamicValuesConfig:
+                capability: List
+
+              type: Number
+
+            new_docid:
+              displayName: Doctor ID
+              description: Doctor ID for readibility and consitentcy like in Patient and Employee
+              order: 9
+              type: String
+
+            new_doctorid:
+              displayName: Doctor
+              description: Unique identifier for entity instances
+              visibility: Advanced
+              order: 8
+              type: String
+
+            new_doctorname:
+              displayName: Doctor Name
+              visibility: Advanced
+              order: 10
+              type: String
+
+            new_email:
+              displayName: Email
+              visibility: Advanced
+              order: 11
+              type: String
+
+            new_phone:
+              displayName: Phone
+              visibility: Advanced
+              order: 27
+              type: String
+
+            new_specialization:
+              displayName: Specialization
+              visibility: Advanced
+              order: 29
+              type: String
+
+            overriddencreatedon:
+              displayName: Record Created On
+              description: Date and time that the record was migrated.
+              visibility: Advanced
+              order: 28
+              type: DateTime
+
+            statecode:
+              displayName: Status
+              description: Status of the Doctor
+              visibility: Advanced
+              order: 30
+              dynamicValuesConfig:
+                capability: List
+
+              type: Number
+
+            statuscode:
+              displayName: Status Reason
+              description: Reason for the status of the Doctor
+              visibility: Advanced
+              order: 31
+              dynamicValuesConfig:
+                capability: List
+
+              type: Number
+
+            timezoneruleversionnumber:
+              displayName: Time Zone Rule Version Number
+              description: For internal use only.
+              visibility: Advanced
+              order: 32
+              type: Number
+
+            utcconversiontimezonecode:
+              displayName: UTC Conversion Time Zone Code
+              description: Time zone code that was in use when the record was created.
+              visibility: Advanced
+              order: 33
+              type: Number
+
+            versionnumber:
+              displayName: Version Number
+              description: Version Number
+              visibility: Advanced
+              order: 34
+              type: Number
+
+outputMode: All

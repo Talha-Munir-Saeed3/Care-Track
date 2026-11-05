@@ -1,0 +1,17 @@
+<botcomponent_connectionreferenceset>
+  <botcomponent_connectionreference botcomponentid.schemaname="new_CareTrackBookingAssistant.action.MicrosoftDataverse-Addanewrowtoselectedenvironment" connectionreferenceid.connectionreferencelogicalname="new_CareTrackBookingAssistant.shared_commondataserviceforapps.shared-commondataser-8bf0e078-6604-4fed-aa94-d79ea1e8d63f">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="new_CareTrackBookingAssistant.action.MicrosoftDataverse-Addanewrowtoselectedenvironment_1TA" connectionreferenceid.connectionreferencelogicalname="new_CareTrackBookingAssistant.shared_commondataserviceforapps.shared-commondataser-8bf0e078-6604-4fed-aa94-d79ea1e8d63f">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="new_CareTrackBookingAssistant.action.MicrosoftDataverse-Listrowsfromselectedenvironment" connectionreferenceid.connectionreferencelogicalname="new_CareTrackBookingAssistant.shared_commondataserviceforapps.shared-commondataser-8bf0e078-6604-4fed-aa94-d79ea1e8d63f">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="new_CareTrackBookingAssistant.action.MicrosoftDataverse-Listrowsfromselectedenvironment_d9J" connectionreferenceid.connectionreferencelogicalname="new_CareTrackBookingAssistant.shared_commondataserviceforapps.shared-commondataser-8bf0e078-6604-4fed-aa94-d79ea1e8d63f">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="new_CareTrackBookingAssistant.action.MicrosoftDataverse-Listrowsfromselectedenvironment_ZtZ" connectionreferenceid.connectionreferencelogicalname="new_CareTrackBookingAssistant.shared_commondataserviceforapps.shared-commondataser-8bf0e078-6604-4fed-aa94-d79ea1e8d63f">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+</botcomponent_connectionreferenceset>

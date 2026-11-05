@@ -1,0 +1,143 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_0e49a"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedoffice365_c9b35"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "eda2fffc-4366-4b25-ae07-a769ef0c6ba2"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "new_doctor",
+              "subscriptionRequest/scope": 4
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "List_rows_Doctor": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "263718b8-574a-40a0-b0c0-80e61e3e249f"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "new_doctors",
+              "$filter": "_new_department_value eq '@{triggerOutputs()?['body/_new_department_value']}' and new_doctorid ne '@{triggerOutputs()?['body/new_doctorid']}'"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Apply_to_each": {
+          "foreach": "@outputs('List_rows_Doctor')?['body/value']",
+          "actions": {
+            "To_Department_Doctors": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "a3da6739-25da-40d7-a922-1ba8b258e871"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_office365",
+                  "operationId": "SendEmailV2",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+                },
+                "parameters": {
+                  "emailMessage/To": "@items('Apply_to_each')?['new_email']",
+                  "emailMessage/Subject": "New Doctor Joined Your Department",
+                  "emailMessage/Body": "<p class=\"editor-paragraph\">Dr. @{triggerOutputs()?['body/new_doctorname']} has joined your department at CareTrack. Please coordinate accordingly.</p>",
+                  "emailMessage/Importance": "Normal"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Welcome_Email": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "f561809a-65f2-477e-acbd-4e47695b1010"
+          },
+          "type": "Foreach"
+        },
+        "Welcome_Email": {
+          "runAfter": {
+            "List_rows_Doctor": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "693eec4b-9086-49c7-817d-a7218f0a5c9f"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_office365",
+              "operationId": "SendEmailV2",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+            },
+            "parameters": {
+              "emailMessage/To": "@triggerOutputs()?['body/new_email']",
+              "emailMessage/Subject": "Welcome to CareTrack!",
+              "emailMessage/Body": "<p class=\"editor-paragraph\">Dear Dr. @{triggerOutputs()?['body/new_doctorname']},<br><br>Welcome to CareTrack! We're thrilled to have you on board.<br><br>Your profile has been successfully created. Your schedule will be set up shortly and your department colleagues have been notified.<br><br>Best regards,<br>CareTrack Team</p>",
+              "emailMessage/Importance": "Normal"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

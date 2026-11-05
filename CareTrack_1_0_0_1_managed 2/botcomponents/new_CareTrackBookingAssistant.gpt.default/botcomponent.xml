@@ -1,0 +1,11 @@
+<botcomponent schemaname="new_CareTrackBookingAssistant.gpt.default">
+  <componenttype>15</componenttype>
+  <description>Helps patients get department recommendations and book appointments, and helps doctors reassign appointments when going on leave.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>CareTrack Booking Assistant</name>
+  <parentbotid>
+    <schemaname>new_CareTrackBookingAssistant</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

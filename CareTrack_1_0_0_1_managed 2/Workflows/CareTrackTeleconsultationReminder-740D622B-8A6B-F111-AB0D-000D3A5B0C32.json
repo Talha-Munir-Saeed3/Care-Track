@@ -1,0 +1,137 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_0e49a"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedoffice365_c9b35"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "new_appointment",
+              "subscriptionRequest/scope": 4
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          }
+        }
+      },
+      "actions": {
+        "Condition": {
+          "actions": {
+            "Get_a_row_by_ID": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "new_patients",
+                  "recordId": "@triggerBody()?['_new_patientid_value']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "GetItem",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              }
+            },
+            "Create_event_(V4)": {
+              "runAfter": {
+                "Get_a_row_by_ID": [
+                  "Succeeded"
+                ]
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "table": "AAMkADEyZjI5NWI5LTJmODYtNDYzZS1hYTk4LTAwZGY2ZTk5YzRhNABGAAAAAACnKhw4bad-SKK5UI2HfYJNBwBU6ov_jimiSKzAM3PpLdjnAAAAAAEGAABU6ov_jimiSKzAM3PpLdjnAAAElGtJAAA=",
+                  "item/subject": "CareTrack Teleconsultation - @{outputs('Get_a_row_by_ID')?['body/new_patientname']}",
+                  "item/start": "@formatDateTime(triggerBody()?['new_appointmentdatetime1'], 'yyyy-MM-ddTHH:mm:ss')",
+                  "item/end": "@formatDateTime(addMinutes(triggerBody()?['new_appointmentdatetime1'], 30), 'yyyy-MM-ddTHH:mm:ss')",
+                  "item/timeZone": "(UTC+05:00) Islamabad, Karachi",
+                  "item/requiredAttendees": "@outputs('Get_a_row_by_ID')?['body/new_email']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "operationId": "V4CalendarPostItem",
+                  "connectionName": "shared_office365"
+                }
+              }
+            },
+            "Send_an_email_(V2)": {
+              "runAfter": {
+                "Create_event_(V4)": [
+                  "Succeeded"
+                ]
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "emailMessage/To": "@outputs('Get_a_row_by_ID')?['body/new_email']",
+                  "emailMessage/Subject": "CareTrack – Your Teleconsultation Link",
+                  "emailMessage/Body": "<p class=\"editor-paragraph\">Dear @{outputs('Get_a_row_by_ID')?['body/new_patientname']},<br><br>Your teleconsultation is confirmed.<br><br>Date: @{formatDateTime(triggerBody()?['new_appointmentdatetime1'], 'dd/MM/yyyy hh:mm tt')}<br>Join here: @{body('Create_event_(V4)')?['webLink']}<br>Regards,<br>CareTrack Hospital Management</p>",
+                  "emailMessage/Importance": "Normal"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "operationId": "SendEmailV2",
+                  "connectionName": "shared_office365"
+                }
+              }
+            }
+          },
+          "runAfter": {},
+          "else": {
+            "actions": {}
+          },
+          "expression": {
+            "and": [
+              {
+                "equals": [
+                  "@int(triggerBody()?['new_consultationmode'])",
+                  100000001
+                ]
+              }
+            ]
+          },
+          "type": "If"
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

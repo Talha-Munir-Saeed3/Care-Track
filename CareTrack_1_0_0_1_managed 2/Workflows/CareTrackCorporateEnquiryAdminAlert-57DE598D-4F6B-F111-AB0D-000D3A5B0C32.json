@@ -1,0 +1,84 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_0e49a"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedoffice365_c9b35"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "5d8c8545-6cb0-48a1-a076-e4e1b3056c35"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "new_corporateaccount",
+              "subscriptionRequest/scope": 4
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Send_an_email_(V2)": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "68bfa6dd-42cb-4964-a2b4-98610284c791"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_office365",
+              "operationId": "SendEmailV2",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+            },
+            "parameters": {
+              "emailMessage/To": "sectiona9@28fzrb.onmicrosoft.com",
+              "emailMessage/Subject": "CareTrack – New Corporate Enquiry:@{triggerOutputs()?['body/new_companyname']}",
+              "emailMessage/Body": "<p>A new corporate wellness enquiry has been received.<br>\n<br>\nCompany: @{triggerOutputs()?['body/new_companyname']}<br>\nIndustry: @{triggerOutputs()?['body/new_industry']}<br>\nEmployees: @{triggerOutputs()?['body/new_numberofenrolledemployees']}<br>\nPackage Interest: @{triggerBody()?['_new_packagetype_label']}<br>\nHR Contact: @{triggerOutputs()?['body/new_hrcontactname']}<br>\nHR Email: @{triggerOutputs()?['body/new_hrcontactemail']}<br>\nHR Phone: @{triggerOutputs()?['body/new_hrcontactphone']}<br>\n<br>\nPlease review in the CareTrack Admin Portal and follow up within 48 hours.</p>",
+              "emailMessage/Importance": "Normal"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}
